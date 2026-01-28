@@ -20,8 +20,9 @@ runs:
       continue-on-error: true
       with:
         image-ref: '${{ inputs.image-name }}:${{ inputs.image-tag }}'
-        format: 'table'
-        output: 'trivy-results.txt'
+        format: 'template'
+        template: '@${{ github.action_path }}/trivy-markdown.tpl'
+        output: 'trivy-results.md'
         ignore-unfixed: true
         vuln-type: 'os,library'
         severity: 'CRITICAL,HIGH'
@@ -29,8 +30,8 @@ runs:
     - name: Print Trivy Results
       shell: bash
       run: |
-        if [ -f trivy-results.txt ]; then
-          cat trivy-results.txt
+        if [ -f trivy-results.md ]; then
+          cat trivy-results.md
         fi
 
     - name: Post Trivy Results to PR Comment
@@ -39,11 +40,8 @@ runs:
       env:
         GH_TOKEN: ${{ inputs.github-token }}
       run: |
-        if [ -s trivy-results.txt ]; then
-          echo '```text' > trivy-comment.md
-          cat trivy-results.txt >> trivy-comment.md
-          echo '```' >> trivy-comment.md
-          gh pr comment ${{ github.event.pull_request.number }} --body-file trivy-comment.md
+        if [ -s trivy-results.md ]; then
+          gh pr comment ${{ github.event.pull_request.number }} --body-file trivy-results.md
         fi
 
     - name: Fail if vulnerabilities found

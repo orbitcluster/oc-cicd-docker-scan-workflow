@@ -13,9 +13,9 @@ It can detect:
 *   **Composite Action**: Easily reusable in other workflows.
 *   **Trivy
     - Scans the image using `aquasecurity/trivy-action`.
-    - Generates a report in standard Table format.
+    - Generates a Markdown report using a custom template.
     - Fails on 'CRITICAL,HIGH' vulnerabilities.
-    - **PR Commenting**: If running on a PR and vulnerabilities are found, it posts the results table to the PR.
+    - **PR Commenting**: If running on a PR and vulnerabilities are found, it posts the formatted table to the PR.
 *   **Quality Gates**: Fails the build if `CRITICAL` or `HIGH` vulnerabilities are detected.
 
 ## Inputs
